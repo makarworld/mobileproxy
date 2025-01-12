@@ -1,5 +1,6 @@
 import requests
 
+
 class MobileProxy:
     def __init__(self, api_key: str = None):
         self.url = "https://mobileproxy.space/api.html"
@@ -7,7 +8,7 @@ class MobileProxy:
 
         self.session = requests.Session()
         self.session.headers = {"Authorization": f"Bearer {self.api_key}"}
-    
+
     def request(self, params: dict = {}, data: dict = {}, method: str = "GET") -> dict:
         """
         Make a request to the MobileProxy API.
@@ -17,14 +18,16 @@ class MobileProxy:
         :param method: HTTP method to use for the request. Default is "GET".
         :return: The response from the API as a dictionary.
         """
-        response = self.session.request(method=method, url=self.url, params=params, data=data)
+        response = self.session.request(
+            method=method, url=self.url, params=params, data=data
+        )
         try:
             return response.json()
         except Exception as e:
             print(f"Error: {e}. Response code: {response.status_code}")
             print(response.content)
             return {"error": str(e)}
-    
+
     def get_ip(self, proxy_id: int) -> dict:
         """
         Получение ip-адреса вашего прокси
@@ -48,11 +51,10 @@ class MobileProxy:
 
         return self.request(params)
 
-
     def change_ip(self, proxy_key: str, user_agent: str, format: str = "json") -> dict:
         """
         Изменение IP-адреса прокси
-        Данный запрос не требует указания заголовка с авторизацией, 
+        Данный запрос не требует указания заголовка с авторизацией,
         необходимо указывать User-agent браузера.
 
         :param proxy_key: Ключ прокси
@@ -64,9 +66,11 @@ class MobileProxy:
         :return: Ответ от сервера
         :rtype: dict
         """
-        url = f"https://changeip.mobileproxy.space/?proxy_key={proxy_key}&format={format}"
+        url = (
+            f"https://changeip.mobileproxy.space/?proxy_key={proxy_key}&format={format}"
+        )
         headers = {"User-Agent": user_agent}
-        
+
         response = self.session.get(url, headers=headers)
         return response.json()
 
@@ -108,7 +112,7 @@ class MobileProxy:
         params = {
             "command": "add_operator_to_black_list",
             "proxy_id": proxy_id,
-            "operator_id": operator_id
+            "operator_id": operator_id,
         }
         return self.request(params)
 
@@ -126,11 +130,13 @@ class MobileProxy:
         params = {
             "command": "remove_operator_black_list",
             "proxy_id": proxy_id,
-            "operator_id": operator_id
+            "operator_id": operator_id,
         }
         return self.request(params)
 
-    def remove_black_list(self, proxy_id: int, black_list_id: int = None, eid: int = None) -> dict:
+    def remove_black_list(
+        self, proxy_id: int, black_list_id: int = None, eid: int = None
+    ) -> dict:
         """
         Удалить записи из черного списка оборудования.
 
@@ -147,7 +153,7 @@ class MobileProxy:
             "command": "remove_black_list",
             "proxy_id": proxy_id,
             "black_list_id": black_list_id,
-            "eid": eid
+            "eid": eid,
         }
         return self.request(params)
 
@@ -160,13 +166,12 @@ class MobileProxy:
         :return: Ответ от сервера с активными прокси
         :rtype: dict
         """
-        params = {
-            "command": "get_my_proxy",
-            "proxy_id": proxy_id
-        }
+        params = {"command": "get_my_proxy", "proxy_id": proxy_id}
         return self.request(params)
 
-    def change_proxy_login_password(self, proxy_id: int, proxy_login: str, proxy_pass: str) -> dict:
+    def change_proxy_login_password(
+        self, proxy_id: int, proxy_login: str, proxy_pass: str
+    ) -> dict:
         """
         Изменение логина и пароля прокси.
 
@@ -183,7 +188,7 @@ class MobileProxy:
             "command": "change_proxy_login_password",
             "proxy_id": proxy_id,
             "proxy_login": proxy_login,
-            "proxy_pass": proxy_pass
+            "proxy_pass": proxy_pass,
         }
         return self.request(params)
 
@@ -196,13 +201,15 @@ class MobileProxy:
         :return: Ответ от сервера о статусе операции
         :rtype: dict
         """
-        params = {
-            "command": "reboot_proxy",
-            "proxy_id": proxy_id
-        }
+        params = {"command": "reboot_proxy", "proxy_id": proxy_id}
         return self.request(params)
 
-    def get_geo_operator_list(self, equipments_back_list: int = None, operators_back_list: int = None, show_count_null: int = None) -> dict:
+    def get_geo_operator_list(
+        self,
+        equipments_back_list: int = None,
+        operators_back_list: int = None,
+        show_count_null: int = None,
+    ) -> dict:
         """
         Получение только доступного оборудования сгруппированного по ГЕО и оператору
 
@@ -216,7 +223,7 @@ class MobileProxy:
             "command": "get_geo_operator_list",
             "equipments_back_list": equipments_back_list,
             "operators_back_list": operators_back_list,
-            "show_count_null": show_count_null
+            "show_count_null": show_count_null,
         }
         return self.request(params)
 
@@ -268,7 +275,16 @@ class MobileProxy:
         params = {"command": "get_geo_list", "proxy_id": proxy_id, "geoid": geoid}
         return self.request(params)
 
-    def change_equipment(self, operator: str, geoid: int, proxy_id: int, add_to_black_list: int, id_country: int, id_city: int, eid: int) -> dict:
+    def change_equipment(
+        self,
+        operator: str,
+        geoid: int,
+        proxy_id: int,
+        add_to_black_list: int,
+        id_country: int,
+        id_city: int,
+        eid: int,
+    ) -> dict:
         """
         Смена оборудования
 
@@ -290,11 +306,22 @@ class MobileProxy:
             "add_to_black_list": add_to_black_list,
             "id_country": id_country,
             "id_city": id_city,
-            "eid": eid
+            "eid": eid,
         }
         return self.request(params)
-    
-    def buy_proxy(self, operator: str, geoid: int, proxy_id: int, period: int, num: int, coupons_code: str = None, id_country: int = None, id_city: int = None, auto_renewal: int = None) -> dict:
+
+    def buy_proxy(
+        self,
+        operator: str,
+        geoid: int,
+        proxy_id: int,
+        period: int,
+        num: int,
+        coupons_code: str = None,
+        id_country: int = None,
+        id_city: int = None,
+        auto_renewal: int = None,
+    ) -> dict:
         """
         Покупка прокси
 
@@ -320,7 +347,7 @@ class MobileProxy:
             "coupons_code": coupons_code,
             "id_country": id_country,
             "id_city": id_city,
-            "auto_renewal": auto_renewal
+            "auto_renewal": auto_renewal,
         }
         return self.request(params)
 
@@ -334,7 +361,13 @@ class MobileProxy:
         params = {"command": "get_balance"}
         return self.request(params)
 
-    def edit_proxy(self, proxy_id: int, proxy_reboot_time: int = None, proxy_ipauth: str = None, proxy_comment: str = None) -> dict:
+    def edit_proxy(
+        self,
+        proxy_id: int,
+        proxy_reboot_time: int = None,
+        proxy_ipauth: str = None,
+        proxy_comment: str = None,
+    ) -> dict:
         """
         Изменение настроек существующего прокси
 
@@ -350,7 +383,7 @@ class MobileProxy:
             "proxy_id": proxy_id,
             "proxy_reboot_time": proxy_reboot_time,
             "proxy_ipauth": proxy_ipauth,
-            "proxy_comment": proxy_comment
+            "proxy_comment": proxy_comment,
         }
         return self.request(params)
 
@@ -376,9 +409,9 @@ class MobileProxy:
         params = {
             "command": "see_the_url_from_different_IPs",
             "url": url,
-            "id_country": id_country
+            "id_country": id_country,
         }
-        return self.request(data = params, method = "POST")
+        return self.request(data=params, method="POST")
 
     def get_task_result(self, tasks_id: int) -> dict:
         """

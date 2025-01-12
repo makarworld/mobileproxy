@@ -239,7 +239,7 @@ class MobileProxy:
         params = {"command": "get_operators_list", "geoid": geoid}
         return self.request(params)
 
-    def get_id_country(self, lang: str) -> dict:
+    def get_id_country(self, lang: str = 'ru') -> dict:
         """
         Получение списка стран
 
@@ -251,7 +251,7 @@ class MobileProxy:
         params = {"command": "get_id_country", "lang": lang}
         return self.request(params)
 
-    def get_id_city(self, lang: str) -> dict:
+    def get_id_city(self, lang: str = 'ru') -> dict:
         """
         Получение списка городов
 
@@ -312,15 +312,16 @@ class MobileProxy:
 
     def buy_proxy(
         self,
-        operator: str,
-        geoid: int,
-        proxy_id: int,
+        id_country: int,
+        id_city: int,
         period: int,
         num: int,
-        coupons_code: str = None,
-        id_country: int = None,
-        id_city: int = None,
-        auto_renewal: int = None,
+        proxy_id: int = None,
+        geoid: int = None,
+        operator: str = None,
+        coupons_code: str = "YdE-Reh-1BY-s4B", # support dev | discount 20% for first order
+        amount_only: bool = False,
+        auto_renewal: int = 0,
     ) -> dict:
         """
         Покупка прокси
@@ -349,6 +350,9 @@ class MobileProxy:
             "id_city": id_city,
             "auto_renewal": auto_renewal,
         }
+        if amount_only:
+            params["amount_only"] = "true"
+
         return self.request(params)
 
     def get_balance(self) -> dict:

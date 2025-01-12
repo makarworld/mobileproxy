@@ -7,10 +7,23 @@ class MobileProxy:
 
         self.session = requests.Session()
         self.session.headers = {"Authorization": f"Bearer {self.api_key}"}
-
+    
     def request(self, params: dict = {}, data: dict = {}, method: str = "GET") -> dict:
-        response = self.session.request(method = method, url = self.url, params = params, data = data)
-        return response.json()
+        """
+        Make a request to the MobileProxy API.
+
+        :param params: Query parameters to send with the request.
+        :param data: Data to send with the request.
+        :param method: HTTP method to use for the request. Default is "GET".
+        :return: The response from the API as a dictionary.
+        """
+        response = self.session.request(method=method, url=self.url, params=params, data=data)
+        try:
+            return response.json()
+        except Exception as e:
+            print(f"Error: {e}. Response code: {response.status_code}")
+            print(response.content)
+            return {"error": str(e)}
     
     def get_ip(self, proxy_id: int) -> dict:
         """

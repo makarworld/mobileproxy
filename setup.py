@@ -25,7 +25,7 @@ setup(
     description="Unofficial python library for working with mobileproxy.space",
 
     packages=['mobileproxy'],
-    install_requires=['requests'],
+    install_requires=['requests', 'curl_cffi'],
 
     license='MIT License',
     long_description=long_description,

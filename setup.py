@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 """
 :author: abuztrade
 :license: MIT License, see LICENSE file.
-:copyright: (c) 2024 by abuztrade.
+:copyright: (c) 2025 by abuztrade.
 """
 
 
-version = '1.0.2'
+version = '1.0.3'
 
 with open("README.md", "r") as f:
     long_description = f.read()

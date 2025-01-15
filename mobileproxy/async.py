@@ -1,4 +1,4 @@
-import requests
+from curl_cffi import requests
 
 
 class MobileProxy:
@@ -6,10 +6,10 @@ class MobileProxy:
         self.url = "https://mobileproxy.space/api.html"
         self.api_key = api_key
 
-        self.session = requests.Session()
+        self.session = requests.AsyncSession()
         self.session.headers = {"Authorization": f"Bearer {self.api_key}"}
 
-    def request(self, params: dict = {}, data: dict = {}, method: str = "GET") -> dict:
+    async def request(self, params: dict = {}, data: dict = {}, method: str = "GET") -> dict:
         """
         Make a request to the MobileProxy API.
 
@@ -18,7 +18,8 @@ class MobileProxy:
         :param method: HTTP method to use for the request. Default is "GET".
         :return: The response from the API as a dictionary.
         """
-        response = self.session.request(
+
+        response = await self.session.request(
             method=method, url=self.url, params=params, data=data
         )
         try:
@@ -28,7 +29,7 @@ class MobileProxy:
             print(response.content)
             return {"error": str(e)}
 
-    def get_ip(self, proxy_id: int) -> dict:
+    async def get_ip(self, proxy_id: int) -> dict:
         """
         Получение ip-адреса вашего прокси
         Данный запрос позволяет узнать, какой ip-адрес в данный момент выдает ваш прокси
@@ -49,9 +50,9 @@ class MobileProxy:
         """
         params = {"command": "proxy_ip", "proxy_id": proxy_id}
 
-        return self.request(params)
+        return await self.request(params)
 
-    def change_ip(self, proxy_key: str, user_agent: str, format: str = "json") -> dict:
+    async def change_ip(self, proxy_key: str, user_agent: str, format: str = "json") -> dict:
         """
         Изменение IP-адреса прокси
         Данный запрос не требует указания заголовка с авторизацией,
@@ -74,7 +75,7 @@ class MobileProxy:
         response = self.session.get(url, headers=headers)
         return response.json()
 
-    def get_price(self, id_country: int) -> dict:
+    async def get_price(self, id_country: int) -> dict:
         """
         Получение цен на прокси в зависимости от страны.
 
@@ -84,9 +85,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_price", "id_country": id_country}
-        return self.request(params)
+        return await self.request(params)
 
-    def get_black_list(self, proxy_id: int) -> dict:
+    async def get_black_list(self, proxy_id: int) -> dict:
         """
         Получение черного списка оборудования и операторов.
 
@@ -96,9 +97,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_black_list", "proxy_id": proxy_id}
-        return self.request(params)
+        return await self.request(params)
 
-    def add_operator_to_black_list(self, proxy_id: int, operator_id: int) -> dict:
+    async def add_operator_to_black_list(self, proxy_id: int, operator_id: int) -> dict:
         """
         Добавить оператора в черный список.
 
@@ -114,9 +115,9 @@ class MobileProxy:
             "proxy_id": proxy_id,
             "operator_id": operator_id,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def remove_operator_from_black_list(self, proxy_id: int, operator_id: int) -> dict:
+    async def remove_operator_from_black_list(self, proxy_id: int, operator_id: int) -> dict:
         """
         Удалить оператора из черного списка.
 
@@ -132,9 +133,9 @@ class MobileProxy:
             "proxy_id": proxy_id,
             "operator_id": operator_id,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def remove_black_list(
+    async def remove_black_list(
         self, proxy_id: int, black_list_id: int = None, eid: int = None
     ) -> dict:
         """
@@ -155,9 +156,9 @@ class MobileProxy:
             "black_list_id": black_list_id,
             "eid": eid,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def get_my_proxy(self, proxy_id: int) -> dict:
+    async def get_my_proxy(self, proxy_id: int) -> dict:
         """
         Получение списка ваших активных прокси.
 
@@ -167,9 +168,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_my_proxy", "proxy_id": proxy_id}
-        return self.request(params)
+        return await self.request(params)
 
-    def change_proxy_login_password(
+    async def change_proxy_login_password(
         self, proxy_id: int, proxy_login: str, proxy_pass: str
     ) -> dict:
         """
@@ -190,9 +191,9 @@ class MobileProxy:
             "proxy_login": proxy_login,
             "proxy_pass": proxy_pass,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def reboot_proxy(self, proxy_id: int) -> dict:
+    async def reboot_proxy(self, proxy_id: int) -> dict:
         """
         Перезагрузка прокси.
 
@@ -202,9 +203,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "reboot_proxy", "proxy_id": proxy_id}
-        return self.request(params)
+        return await self.request(params)
 
-    def get_geo_operator_list(
+    async def get_geo_operator_list(
         self,
         equipments_back_list: int = None,
         operators_back_list: int = None,
@@ -225,9 +226,9 @@ class MobileProxy:
             "operators_back_list": operators_back_list,
             "show_count_null": show_count_null,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def get_operators_list(self, geoid: int = None) -> dict:
+    async def get_operators_list(self, geoid: int = None) -> dict:
         """
         Получение списка операторов
 
@@ -237,9 +238,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_operators_list", "geoid": geoid}
-        return self.request(params)
+        return await self.request(params)
 
-    def get_id_country(self, lang: str = 'ru') -> dict:
+    async def get_id_country(self, lang: str = 'ru') -> dict:
         """
         Получение списка стран
 
@@ -249,9 +250,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_id_country", "lang": lang}
-        return self.request(params)
+        return await self.request(params)
 
-    def get_id_city(self, lang: str = 'ru') -> dict:
+    async def get_id_city(self, lang: str = 'ru') -> dict:
         """
         Получение списка городов
 
@@ -261,9 +262,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_id_city", "lang": lang}
-        return self.request(params)
+        return await self.request(params)
 
-    def get_geo_list(self, proxy_id: int = None, geoid: int = None) -> dict:
+    async def get_geo_list(self, proxy_id: int = None, geoid: int = None) -> dict:
         """
         Получение списка доступных ГЕО
 
@@ -273,9 +274,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_geo_list", "proxy_id": proxy_id, "geoid": geoid}
-        return self.request(params)
+        return await self.request(params)
 
-    def change_equipment(
+    async def change_equipment(
         self,
         proxy_id: int,
         add_to_black_list: int,
@@ -308,9 +309,9 @@ class MobileProxy:
             "id_city": id_city,
             "eid": eid,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def buy_proxy(
+    async def buy_proxy(
         self,
         id_country: int,
         id_city: int,
@@ -353,9 +354,9 @@ class MobileProxy:
         if amount_only:
             params["amount_only"] = "true"
 
-        return self.request(params)
+        return await self.request(params)
 
-    def get_balance(self) -> dict:
+    async def get_balance(self) -> dict:
         """
         Получение баланса аккаунта
 
@@ -363,9 +364,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_balance"}
-        return self.request(params)
+        return await self.request(params)
 
-    def edit_proxy(
+    async def edit_proxy(
         self,
         proxy_id: int,
         proxy_reboot_time: int = None,
@@ -389,9 +390,9 @@ class MobileProxy:
             "proxy_ipauth": proxy_ipauth,
             "proxy_comment": proxy_comment,
         }
-        return self.request(params)
+        return await self.request(params)
 
-    def get_ipstat(self) -> dict:
+    async def get_ipstat(self) -> dict:
         """
         Статистика IP-адресов мобильных прокси по ГЕО
 
@@ -399,9 +400,9 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "get_ipstat"}
-        return self.request(params)
+        return await self.request(params)
 
-    def see_the_url_from_different_IPs(self, url: str, id_country: str = None) -> dict:
+    async def see_the_url_from_different_IPs(self, url: str, id_country: str = None) -> dict:
         """
         Получить содержимое страницы с разных IP
 
@@ -415,9 +416,9 @@ class MobileProxy:
             "url": url,
             "id_country": id_country,
         }
-        return self.request(data=params, method="POST")
+        return await self.request(data=params, method="POST")
 
-    def get_task_result(self, tasks_id: int) -> dict:
+    async def get_task_result(self, tasks_id: int) -> dict:
         """
         Получение результата выполнения задачи
 
@@ -426,4 +427,4 @@ class MobileProxy:
         :rtype: dict
         """
         params = {"command": "tasks", "tasks_id": tasks_id}
-        return self.request(params)
+        return await self.request(params)
